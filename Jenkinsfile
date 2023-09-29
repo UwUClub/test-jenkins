@@ -1,13 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'ubuntu:latest'
-        }
-    }
+    agent any
 
     stages {
         stage('build') {
             steps {
+                sh 'who am i'
                 sh 'cmake -S . -B build'
                 sh 'cmake --build build'
             }
