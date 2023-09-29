@@ -72,4 +72,6 @@ pipeline {
                     sh "cmake --build ./build --config ${env.MATRIX_BUILD_TYPE}"
                 }
             }
-         }
+        }
+    }
+}
