@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'who am i'
+                sh 'whoami'
                 sh 'cmake -S . -B build'
                 sh 'cmake --build build'
             }
