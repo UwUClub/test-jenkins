@@ -1,37 +1,50 @@
 pipeline {
+    agent none  // This allows us to specify agents per stage
     stages {
-        agent {
-            dockerfile {
-                filename 'Dockerfile'
-            }
-        }
-        stage('build') {
-            steps {
-                sh 'cmake -S . -B build'
-                sh 'cmake --build build'
-            }
-        }
-        stage('test') {
-            steps {
-                sh './build/proj'
-            }
-        }
-    }
-    stages {
-        agent {
-            dockerfile {
-                filename 'DockerfileWindows'
-            }
-        }
-        stage('build') {
-            steps {
-                sh 'cmake -S . -B build'
-                sh 'cmake --build build'
-            }
-        }
-        stage('test') {
-            steps {
-                sh './build/proj'
+        stage('build and test') {
+            matrix {
+                axes {
+                    axis {
+                        name 'PLATFORM'
+                        values 'linux', 'windows'
+                    }
+                }
+                stages {
+                    stage('build') {
+                        agent {
+                            dockerfile {
+                                filename "${PLATFORM == 'linux' ? 'Dockerfile' : 'DockerfileWindows'}"
+                            }
+                        }
+                        steps {
+                            script {
+                                if (PLATFORM == 'linux') {
+                                    sh 'cmake -S . -B build'
+                                    sh 'cmake --build build'
+                                } else {
+                                    bat 'cmake -S . -B build'
+                                    bat 'cmake --build build'
+                                }
+                            }
+                        }
+                    }
+                    stage('test') {
+                        agent {
+                            dockerfile {
+                                filename "${PLATFORM == 'linux' ? 'Dockerfile' : 'DockerfileWindows'}"
+                            }
+                        }
+                        steps {
+                            script {
+                                if (PLATFORM == 'linux') {
+                                    sh './build/proj'
+                                } else {
+                                    bat '.\\build\\proj.exe'
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
