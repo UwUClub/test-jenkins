@@ -6,32 +6,35 @@ pipeline {
         VERBOSE = "1"
     }
 
-    stages {
-        stage('Test') {
-            matrix {
-                axes {
-                    axis {
-                        name 'OS'
-                        values 'ubuntu-20.04', 'windows-2019'
-                    }
-                    axis {
-                        name 'COMPILER'
-                        values 'llvm-15.0.2', 'gcc-11'
-                    }
-                    axis {
-                        name 'BUILD_TYPE'
-                        values 'Release', 'Debug'
-                    }
-                    axis {
-                        name 'PACKAGING_MAINTAINER_MODE'
-                        values 'ON', 'OFF'
-                    }
-                    axis {
-                        name 'BUILD_SHARED'
-                        values 'OFF'
-                    }
+    parameters {
+        matrix {
+            axes {
+                axis {
+                    name 'OS'
+                    values 'ubuntu-20.04', 'windows-2019'
+                }
+                axis {
+                    name 'COMPILER'
+                    values 'llvm-15.0.2', 'gcc-11'
+                }
+                axis {
+                    name 'BUILD_TYPE'
+                    values 'Release', 'Debug'
+                }
+                axis {
+                    name 'PACKAGING_MAINTAINER_MODE'
+                    values 'ON', 'OFF'
+                }
+                axis {
+                    name 'BUILD_SHARED'
+                    values 'OFF'
                 }
             }
+        }
+    }
+
+    stages {
+        stage('Test') {
             steps {
                 script {
                     if (env.COMPILER.contains('llvm') && !env.COMPILER.contains(env.CLANG_TIDY_VERSION)) {
