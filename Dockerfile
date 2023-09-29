@@ -1,5 +1,4 @@
 FROM ubuntu:latest
-LABEL authors="beafowl"
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -10,5 +9,3 @@ RUN apt-get update && apt-get install -y \
 
 RUN useradd jenkins --shell /bin/bash --create-home
 USER jenkins
-
-ENTRYPOINT ["top", "-b"]
