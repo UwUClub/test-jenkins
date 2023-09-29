@@ -7,6 +7,8 @@ RUN Set-ExecutionPolicy Bypass -Scope Process -Force; \
 
 RUN choco install -y cmake git visualstudio2019buildtools --package-parameters "--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64"
 RUN choco install -y git
+RUN git --version
+RUN setx /M PATH "%PATH%;C:\Program Files\Git\bin"
 RUN choco install -y ccache
 
 RUN net user /add jenkins jenkinsPassword
