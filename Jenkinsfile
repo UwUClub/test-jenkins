@@ -52,12 +52,12 @@ pipeline {
 
                 script {
                     if (env.OS== 'ubuntu-20.04') {
-                        sh "wget "https://github.com/aminya/setup-cpp/releases/download/v0.35.6/setup-cpp-x64-linux"
+                        sh "wget https://github.com/aminya/setup-cpp/releases/download/v0.35.6/setup-cpp-x64-linux"
                         sh "chmod +x ./setup-cpp-x64-linux"
                         sh "sudo ./setup-cpp-x64-linux --compiler llvm --cmake true --ninja true --ccache true --vcpkg true"
                         sh "source ~/.cpprc"
                     } else if (env.OS == 'windows-2019') {
-                        powershell "curl -LJO "https://github.com/aminya/setup-cpp/releases/download/v0.35.6/setup-cpp-x64-windows.exe"
+                        powershell "curl -LJO https://github.com/aminya/setup-cpp/releases/download/v0.35.6/setup-cpp-x64-windows.exe"
                         powershell "./setup-cpp-x64-windows --compiler llvm --cmake true --ninja true --ccache true --vcpkg true"
                         powershell "RefreshEnv.cmd"
                     }
