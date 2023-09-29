@@ -8,7 +8,6 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'whoami'
                 sh 'apt install -y build-essential'
                 sh 'cmake -S . -B build'
                 sh 'cmake --build build'
