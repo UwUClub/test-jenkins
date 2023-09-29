@@ -1,10 +1,14 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'ubuntu:latest'
+        }
+    }
 
     stages {
         stage('build') {
             steps {
-                sh 'whoami'
+                sh 'apt install -y build-essential'
                 sh 'cmake -S . -B build'
                 sh 'cmake --build build'
             }
