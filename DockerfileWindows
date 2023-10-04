@@ -1,4 +1,9 @@
-FROM rancher/windows_exporter-package
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+
+RUN 'curl -LJO "https://github.com/aminya/setup-cpp/releases/download/v0.35.6/setup-cpp-x64-windows.exe"'
+RUN ./setup-cpp-x64-windows --compiler llvm --cmake true --ninja true --ccache true --vcpkg true --gcovr true --cppcheck true --clang-tidy true --clang-format true --install --msvc true
+
+RUN RefreshEnv.cmd
 
 RUN net user /add jenkins jenkinsPassword
 USER jenkins
