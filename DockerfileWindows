@@ -1,10 +1,27 @@
+# Use the Visual Studio 2019 Build Tools image
 FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-RUN winget install --id=cURL.cURL  -e
-RUN 'curl -LJO "https://github.com/aminya/setup-cpp/releases/download/v0.35.6/setup-cpp-x64-windows.exe"'
-RUN ./setup-cpp-x64-windows --compiler llvm --cmake true --ninja true --ccache true --vcpkg true --gcovr true --cppcheck true --clang-tidy true --clang-format true --install --msvc true
+# Install Visual Studio Build Tools
+ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
+RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
+    --installPath C:\BuildTools \
+    --add Microsoft.VisualStudio.Workload.VCTools \
+    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+    --add Microsoft.VisualStudio.Component.VC.CMake.Project \
+    || IF "%ERRORLEVEL%"=="3010" EXIT 0
 
-RUN RefreshEnv.cmd
+# Install CMake
+ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
+RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
 
-RUN net user /add jenkins jenkinsPassword
-USER jenkins
+# Set the working directory in the Docker image
+WORKDIR /usr/src/myapp
+
+# Copy the current directory contents into the container at /usr/src/myapp
+COPY . /usr/src/myapp
+
+# Configure the project build with CMake
+RUN cmake -G "Visual Studio 16 2019" -A x64 .
+
+# Build the project
+RUN cmake --build . --config Release
