@@ -1,15 +1,19 @@
+# escape=`
+
 FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-# Install Visual Studio Build Tools
-ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
-RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
-    --installPath C:\BuildTools \
-    --add Microsoft.VisualStudio.Workload.VCTools \
-    --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
-    --add Microsoft.VisualStudio.Component.Windows10SDK \
-    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
-    --add Microsoft.Component.MSBuild \
-    || IF "%ERRORLEVEL%"=="3010" EXIT 0
+SHELL ["cmd", "/S", "/C"]
+
+ARG CHANNEL_URL=https://aka.ms/vs/17/release/channel
+ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
+
+# Download and install Build Tools for Visual Studio 2022 for native desktop workload.
+ADD https://aka.ms/vs/17/release/vs_buildtools.exe C:\TEMP\vs_buildtools.exe
+RUN C:\TEMP\Install.cmd C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
+    --channelUri C:\TEMP\VisualStudio.chman `
+    --installChannelUri C:\TEMP\VisualStudio.chman `
+    --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended`
+    --installPath C:\BuildTools
 
 # Install CMake
 ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
@@ -21,5 +25,6 @@ RUN setx /M PATH "%PATH%;C:\Program Files\CMake\bin"
 # Enable support for paths longer than 260 characters
 RUN reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
 
+# Use developer command prompt and start PowerShell if no other command specified.
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
-CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
+CMD ["powershell.exe", "-NoLogo", "-ExecutionPolicy", "Bypass"]
