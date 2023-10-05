@@ -17,14 +17,14 @@ RUN C:\TEMP\Install.cmd C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --n
     --add Microsoft.VisualStudio.Component.Windows10SDK.19041 `
     --add Microsoft.VisualStudio.Component.VC.cmake `
     --add Microsoft.VisualStudio.Component.VC.ATL `
-    --add Microsoft.VisualStudio.Component.VC.ATLMFC ` \
+    --add Microsoft.VisualStudio.Component.VC.ATLMFC `
     --add Microsoft.VisualStudio.Component.VC.Redist.14.Latest `
     --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
     --add Microsoft.VisualStudio.Component.VC.CLI.Support `
     --add Microsoft.VisualStudio.Component.VC.CMake.Project `
     --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
     --add Microsoft.VisualStudio.Component.VC.CMake.Project `
-    --includeRecommended`
+    --includeRecommended `
     --installPath C:\BuildTools
 
 # Install CMake
