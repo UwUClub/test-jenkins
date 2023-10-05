@@ -8,7 +8,7 @@ WORKDIR /usr/src/myapp
 COPY . /usr/src/myapp
 
 # Configure the project build with CMake
-RUN cmd /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat && cmake -G \"Visual Studio 16 2019\" -A x64 -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=\"/MP /W4 /WX /EHsc /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MT /O2 /Ob2 /DNDEBUG\""
+RUN cmd /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat && cmake -S . -B ./build "
 
 # Build the project
 RUN cmd /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat && cmake --build ./build --config Release"
