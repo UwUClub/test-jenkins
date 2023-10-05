@@ -1,5 +1,5 @@
 pipeline {
-    agent none  // This allows us to specify agents per stage
+    agent none
     stages {
         stage('build and test') {
             matrix {
@@ -13,17 +13,17 @@ pipeline {
                     stage('build') {
                         agent {
                             dockerfile {
-                                filename "${PLATFORM == 'linux' ? 'Dockerfile' : 'DockerfileWindows'}"
+                                filename "${PLATFORM == 'linux' ? 'DockerfileLinux' : 'DockerfileWindows'}"
                             }
                         }
                         steps {
                             script {
                                 if (PLATFORM == 'linux') {
                                     sh 'cmake -S . -B build'
-                                    sh 'cmake --build build'
+                                    sh 'cmake --build build -j 10'
                                 } else {
-                                    bat 'cmake -S . -B build'
-                                    bat 'cmake --build build'
+                                    bat '.\\build.bat'
+                                    bat '.\\compile.bat'
                                 }
                             }
                         }
