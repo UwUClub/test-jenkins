@@ -1,19 +1,15 @@
-# escape=`
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019
-
-SHELL ["cmd", "/S", "/C"]
-
-ADD https://aka.ms/vs/16/release/vs_buildtools.exe C:\TEMP\vs_buildtools.exe
-RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
-    --installPath C:\BuildTools `
-    --add Microsoft.VisualStudio.Component.VC.CoreBuildTools `
-	--add Microsoft.VisualStudio.Component.VC.Redist.14.Latest `
-	--add Microsoft.VisualStudio.Component.Windows10SDK `
-	--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
-	--add Microsoft.VisualStudio.Component.Windows10SDK.17763 `
-	--add Microsoft.Component.MSBuild `
-	|| IF "%ERRORLEVEL%"=="3010" EXIT 0
+# Install Visual Studio Build Tools
+ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
+RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
+    --installPath C:\BuildTools \
+    --add Microsoft.VisualStudio.Workload.VCTools \
+    --add Microsoft.VisualStudio.Component.VC.CoreBuildTools \
+    --add Microsoft.VisualStudio.Component.Windows10SDK \
+    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+    --add Microsoft.Component.MSBuild \
+    || IF "%ERRORLEVEL%"=="3010" EXIT 0
 
 # Install CMake
 ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
@@ -21,3 +17,9 @@ RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
 
 # Make cmake available in PATH
 RUN setx /M PATH "%PATH%;C:\Program Files\CMake\bin"
+
+# Enable support for paths longer than 260 characters
+RUN reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
+
+ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
+CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
