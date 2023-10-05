@@ -1,18 +1,5 @@
 # Use the Visual Studio 2019 Build Tools image
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
-
-# Install Visual Studio Build Tools
-ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
-RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
-    --installPath C:\BuildTools \
-    --add Microsoft.VisualStudio.Workload.VCTools \
-    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
-    --add Microsoft.VisualStudio.Component.VC.CMake.Project \
-    || IF "%ERRORLEVEL%"=="3010" EXIT 0
-
-# Install CMake
-ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
-RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
+FROM methall/windows:ltsc2019-vs2019-cmake3.27.6
 
 # Set the working directory in the Docker image
 WORKDIR /usr/src/myapp
@@ -21,7 +8,7 @@ WORKDIR /usr/src/myapp
 COPY . /usr/src/myapp
 
 # Configure the project build with CMake
-RUN cmake -G "Visual Studio 16 2019" -A x64 .
+RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build
 
 # Build the project
-RUN cmake --build . --config Release
+RUN cmake --build ./build --config Release
