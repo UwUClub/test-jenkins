@@ -7,10 +7,12 @@ WORKDIR /usr/src/myapp
 # Copy the current directory contents into the container at /usr/src/myapp
 COPY . /usr/src/myapp
 
+# Copy the build scripts into the Docker image
+COPY build.bat .
+COPY compile.bat .
+
 # Configure the project build with CMake
-RUN cmd /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat && cmake -S . -B ./build "
+RUN cmd /C build.bat
 
 # Build the project
-RUN cmd /C "C:\BuildTools\Common7\Tools\VsDevCmd.bat && cmake --build ./build --config Release"
-
-
+RUN cmd /C compile.bat
