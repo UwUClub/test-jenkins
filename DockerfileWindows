@@ -1,8 +1,8 @@
 # Use the Visual Studio 2019 Build Tools image
 FROM my-msvc-image
 
-RUN net user /add jenkins jenkins && \
-net localgroup Administrators Lov@C1c411 /add
+RUN net user /add jenkins Lov@C1c411 && \
+net localgroup Administrators jenkins /add
 
 # Set the working directory in the Docker image
 WORKDIR /usr/src/myapp
