@@ -21,7 +21,7 @@ pipeline {
                                 if (PLATFORM == 'linux') {
                                     sh './build/proj'
                                 } else {
-                                    bat '.\\build\\proj.exe'
+                                    bat '.\build\Debug\proj.exe'
                                 }
                             }
                         }
