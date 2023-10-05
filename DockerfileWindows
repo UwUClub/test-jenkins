@@ -8,7 +8,7 @@ WORKDIR /usr/src/myapp
 COPY . /usr/src/myapp
 
 # Configure the project build with CMake
-RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build
+RUN cmake -S . -B ./build
 
 # Build the project
 RUN cmake --build ./build --config Release
