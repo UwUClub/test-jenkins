@@ -8,7 +8,7 @@ WORKDIR /usr/src/myapp
 COPY . /usr/src/myapp
 
 # Configure the project build with CMake
-RUN cmake -S . -B ./build
+RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/MP /W4 /WX /EHsc /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MT /O2 /Ob2 /DNDEBUG"
 
 # Build the project
 RUN cmake --build ./build --config Release
