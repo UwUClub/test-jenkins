@@ -31,7 +31,7 @@ pipeline {
                     stage('test') {
                         agent {
                             dockerfile {
-                                filename "${PLATFORM == 'linux' ? 'Dockerfile' : 'DockerfileWindows'}"
+                                filename "${PLATFORM == 'linux' ? 'DockerfileLinux' : 'DockerfileWindows'}"
                             }
                         }
                         steps {
