@@ -14,17 +14,17 @@
 #RUN cmake --build ./build --config Release
 
 
-# Use a Windows base image
-FROM mcr.microsoft.com/windows:ltsc2019
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-# Set the Path environment variable to include MSVCFROM my-msvc-image
-ENV Path="C:/BuildTools/VC/Tools/MSVC/14.28.29910/bin/Hostx64/x64;${Path}"
+# Install Visual Studio Build Tools
+ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
+RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
+    --installPath C:\BuildTools \
+    --add Microsoft.VisualStudio.Workload.VCTools \
+    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+    --add Microsoft.VisualStudio.Component.VC.CMake.Project \
+    || IF "%ERRORLEVEL%"=="3010" EXIT 0
 
-RUN powershell -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-
-RUN choco install -Y cmake --version %CMAKE_VERSION% --installargs 'ADD_CMAKE_TO_PATH=System'
-
-RUN reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
-
-ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
-CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
+# Install CMake
+ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
+RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
