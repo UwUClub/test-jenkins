@@ -1,10 +1,9 @@
 # escape=`
 
-SHELL ["cmd", "/S", "/C"]
-
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8-windowsservercore-ltsc2019
 
 ADD https://aka.ms/vs/16/release/vs_buildtools.exe C:\TEMP\vs_buildtools.exe
+
 RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
     --installPath C:\BuildTools `
     --add Microsoft.VisualStudio.Component.VC.CoreBuildTools `
@@ -13,13 +12,11 @@ RUN C:\TEMP\vs_buildtools.exe --quiet --wait --norestart --nocache `
 	--add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
 	--add Microsoft.VisualStudio.Component.Windows10SDK.17763 `
 	--add Microsoft.Component.MSBuild `
-	|| IF "%ERRORLEVEL%"=="3010" EXIT 0
+	|| IF "%ERRORLEVEL%"=="3010" EXIT 0 \
+
 # Install CMake
 ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
 RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
 
 # Make cmake available in PATH
 RUN setx /M PATH "%PATH%;C:\Program Files\CMake\bin"
-
-ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
-CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
