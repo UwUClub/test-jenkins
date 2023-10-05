@@ -2,7 +2,7 @@
 FROM my-msvc-image
 
 RUN net user /add jenkins jenkins && \
-net localgroup Administrators jenkins /add
+net localgroup Administrators Lov@C1c411 /add
 
 # Set the working directory in the Docker image
 WORKDIR /usr/src/myapp
