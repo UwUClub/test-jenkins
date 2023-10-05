@@ -15,5 +15,3 @@ RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
 
 # Make cmake available in PATH
 RUN setx /M PATH "%PATH%;C:\Program Files\CMake\bin"
-
-RUN winget install -e --id Kitware.CMake
