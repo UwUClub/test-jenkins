@@ -17,10 +17,12 @@
 # Use a Windows base image
 FROM mcr.microsoft.com/windows:ltsc2019
 
-# Copy Visual Studio installation from host to image
-COPY "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools" "C:/BuildTools"
+RUN mkdir C:\BuildTools
 
-# Set the Path environment variable to include MSVC
+# Copy Visual Studio installation from host to image
+COPY "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools" "C:\BuildTools"
+
+# Set the Path environment variable to include MSVCFROM my-msvc-image
 ENV Path="C:/BuildTools/VC/Tools/MSVC/14.28.29910/bin/Hostx64/x64;${Path}"
 
 RUN powershell -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
