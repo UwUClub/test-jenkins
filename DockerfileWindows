@@ -1,5 +1,5 @@
 # Use the Visual Studio 2019 Build Tools image
-FROM methall/windows:ltsc2019-vs2019-cmake3.27.6
+FROM metthal/windows:ltsc2019-vs2019-cmake3.27.6
 
 # Set the working directory in the Docker image
 WORKDIR /usr/src/myapp
