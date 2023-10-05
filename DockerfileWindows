@@ -12,13 +12,6 @@ COPY . /usr/src/myapp
 
 # Copy the build scripts into the Docker image
 COPY build.bat .
-COPY compile.bat .
-
-# Configure the project build with CMake
-RUN cmd /C build.bat
-
-# Build the project
-RUN cmd /C compile.bat
 
 ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
 CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
