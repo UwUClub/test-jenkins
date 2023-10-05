@@ -1,14 +1,33 @@
-# Use the Visual Studio 2019 Build Tools image
-FROM metthal/windows:ltsc2019-vs2019-cmake3.27.6
+## Use the Visual Studio 2019 Build Tools image
+#FROM metthal/windows:ltsc2019-vs2019-cmake3.27.6
+#
+## Set the working directory in the Docker image
+#WORKDIR /usr/src/myapp
+#
+## Copy the current directory contents into the container at /usr/src/myapp
+#COPY . /usr/src/myapp
+#
+## Configure the project build with CMake
+#RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/MP /W4 /WX /EHsc /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MT /O2 /Ob2 /DNDEBUG"
+#
+## Build the project
+#RUN cmake --build ./build --config Release
 
-# Set the working directory in the Docker image
-WORKDIR /usr/src/myapp
 
-# Copy the current directory contents into the container at /usr/src/myapp
-COPY . /usr/src/myapp
+# Use a Windows base image
+FROM mcr.microsoft.com/windows:ltsc2019
 
-# Configure the project build with CMake
-RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/MP /W4 /WX /EHsc /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MT /O2 /Ob2 /DNDEBUG"
+# Copy Visual Studio installation from host to image
+COPY "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools" "C:/BuildTools"
 
-# Build the project
-RUN cmake --build ./build --config Release
+# Set the Path environment variable to include MSVC
+ENV Path="C:/BuildTools/VC/Tools/MSVC/14.28.29910/bin/Hostx64/x64;${Path}"
+
+RUN powershell -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+
+RUN choco install -Y cmake --version %CMAKE_VERSION% --installargs 'ADD_CMAKE_TO_PATH=System'
+
+RUN reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
+
+ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
+CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
