@@ -1,30 +1,30 @@
-## Use the Visual Studio 2019 Build Tools image
-#FROM metthal/windows:ltsc2019-vs2019-cmake3.27.6
-#
-## Set the working directory in the Docker image
-#WORKDIR /usr/src/myapp
-#
-## Copy the current directory contents into the container at /usr/src/myapp
-#COPY . /usr/src/myapp
-#
-## Configure the project build with CMake
-#RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/MP /W4 /WX /EHsc /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MT /O2 /Ob2 /DNDEBUG"
-#
-## Build the project
-#RUN cmake --build ./build --config Release
+# Use the Visual Studio 2019 Build Tools image
+FROM my-msvc-image
 
+# Set the working directory in the Docker image
+WORKDIR /usr/src/myapp
 
-FROM mcr.microsoft.com/windows/servercore:ltsc2019
+# Copy the current directory contents into the container at /usr/src/myapp
+COPY . /usr/src/myapp
 
-# Install Visual Studio Build Tools
-ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
-RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
-    --installPath C:\BuildTools \
-    --add Microsoft.VisualStudio.Workload.VCTools \
-    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
-    --add Microsoft.VisualStudio.Component.VC.CMake.Project \
-    || IF "%ERRORLEVEL%"=="3010" EXIT 0
+# Configure the project build with CMake
+RUN cmake -G "Visual Studio 16 2019" -A x64 -S . -B ./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="/MP /W4 /WX /EHsc /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MT /O2 /Ob2 /DNDEBUG"
 
-# Install CMake
-ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
-RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
+# Build the project
+RUN cmake --build ./build --config Release
+
+#
+#FROM mcr.microsoft.com/windows/servercore:ltsc2019
+#
+## Install Visual Studio Build Tools
+#ADD https://aka.ms/vs/16/release/vs_buildtools.exe vs_buildtools.exe
+#RUN vs_buildtools.exe --quiet --wait --norestart --nocache \
+#    --installPath C:\BuildTools \
+#    --add Microsoft.VisualStudio.Workload.VCTools \
+#    --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 \
+#    --add Microsoft.VisualStudio.Component.VC.CMake.Project \
+#    || IF "%ERRORLEVEL%"=="3010" EXIT 0
+#
+## Install CMake
+#ADD https://github.com/Kitware/CMake/releases/download/v3.21.1/cmake-3.21.1-windows-x86_64.msi cmake-installer.msi
+#RUN msiexec.exe /i cmake-installer.msi /quiet /norestart
