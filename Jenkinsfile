@@ -10,24 +10,6 @@ pipeline {
                     }
                 }
                 stages {
-                    stage('build') {
-                        agent {
-                            dockerfile {
-                                filename "${PLATFORM == 'linux' ? 'DockerfileLinux' : 'DockerfileWindows'}"
-                            }
-                        }
-                        steps {
-                            script {
-                                if (PLATFORM == 'linux') {
-                                    sh 'cmake -S . -B build'
-                                    sh 'cmake --build build -j 10'
-                                } else {
-                                    bat '.\\build.bat'
-                                    bat '.\\compile.bat'
-                                }
-                            }
-                        }
-                    }
                     stage('test') {
                         agent {
                             dockerfile {

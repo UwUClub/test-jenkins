@@ -21,12 +21,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52ae615e-a4f3-4fb4-b832-df05c3d162d4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DockerfileWindows" beforeDir="false" afterPath="$PROJECT_DIR$/DockerfileWindows" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/Jenkinsfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/compile.bat" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +99,7 @@
       <workItem from="1696424031427" duration="64000" />
       <workItem from="1696425467833" duration="4571000" />
       <workItem from="1696508508579" duration="8290000" />
-      <workItem from="1696523895800" duration="5656000" />
+      <workItem from="1696523895800" duration="6211000" />
     </task>
     <servers />
   </component>
