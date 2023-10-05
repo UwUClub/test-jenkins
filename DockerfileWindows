@@ -1,6 +1,9 @@
 # Use the Visual Studio 2019 Build Tools image
 FROM my-msvc-image
 
+RUN net user /add jenkins jenkinspassword && \
+net localgroup Administrators jenkins /add
+
 # Set the working directory in the Docker image
 WORKDIR /usr/src/myapp
 
@@ -16,3 +19,6 @@ RUN cmd /C build.bat
 
 # Build the project
 RUN cmd /C compile.bat
+
+ENTRYPOINT C:\BuildTools\Common7\Tools\VsDevCmd.bat &&
+CMD powershell.exe -NoLogo -ExecutionPolicy Bypass
