@@ -1,8 +1,18 @@
 pipeline {
     agent none
+    triggers {
+        githubPush()  // This line triggers the job on a push to GitHub
+    }
     stages {
         stage('build and test') {
             matrix {
+                when {
+                    anyOf {
+                        branch 'main'
+                        branch 'dev'
+                        branch 'RT-45-new-cicd'
+                    }
+                }
                 axes {
                     axis {
                         name 'PLATFORM'
