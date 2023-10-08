@@ -10,6 +10,8 @@ RUN powershell -command "Expand-Archive c:\MinGit.zip -DestinationPath c:\MinGit
 
 RUN setx /M PATH "%PATH%;C:\MinGit\cmd"
 
+RUN git --version
+
 ARG CHANNEL_URL=https://aka.ms/vs/17/release/channel
 ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
 
