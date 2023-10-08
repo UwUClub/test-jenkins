@@ -5,12 +5,17 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019
 SHELL ["cmd", "/S", "/C"]
 
 ADD https://github.com/git-for-windows/git/releases/download/v2.12.2.windows.2/MinGit-2.12.2.2-64-bit.zip c:\MinGit.zip
-
 RUN powershell -command "Expand-Archive c:\MinGit.zip -DestinationPath c:\MinGit"
 
 RUN setx /M PATH "%PATH%;C:\MinGit\cmd"
 
-RUN git --version
+ADD https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.zip C:\TEMP\boost_1_83_0.zip
+RUN powershell -command "Expand-Archive C:\TEMP\boost_1_83_0.zip -DestinationPath C:\Boost"
+
+RUN setx /M BOOST_ROOT "C:\Boost\boost_1_83_0"
+
+RUN setx /M PATH "%PATH%;C:\Boost\boost_1_83_0"
+
 
 ARG CHANNEL_URL=https://aka.ms/vs/17/release/channel
 ADD ${CHANNEL_URL} C:\TEMP\VisualStudio.chman
