@@ -1,0 +1,41 @@
+name: ci
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: gcc-11
+          cmake: true
+
+      - name: Compilation
+        run: |
+          cmake -S . -B ./build
+          cmake --build ./build ${{env.nproc}}
+          
+      - name: CPack
+        working-directory: ./build
+        run: |
+          cpack -G ZIP
+
+      - name: Project-release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref == 'refs/heads/master' && 'master' || github.ref }}
+          files: |
+            ./build/bin/client*
+            ./build/bin/server*
+            ./assets

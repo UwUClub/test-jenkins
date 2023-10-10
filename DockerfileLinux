@@ -9,3 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN useradd jenkins --shell /bin/bash --create-home
 USER jenkins
+
+WORKDIR /home/jenkins
+
+COPY --chown=jenkins:jenkins . /home/jenkins
