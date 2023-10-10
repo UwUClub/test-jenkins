@@ -21,9 +21,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="52ae615e-a4f3-4fb4-b832-df05c3d162d4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DockerfileLinux" beforeDir="false" afterPath="$PROJECT_DIR$/DockerfileLinux" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +103,7 @@
       <workItem from="1696774890593" duration="693000" />
       <workItem from="1696776624961" duration="2284000" />
       <workItem from="1696785332049" duration="2936000" />
-      <workItem from="1696971585034" duration="305000" />
+      <workItem from="1696971585034" duration="665000" />
     </task>
     <servers />
   </component>

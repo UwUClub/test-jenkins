@@ -36,6 +36,4 @@ jobs:
         with:
           tag_name: ${{ github.ref == 'refs/heads/master' && 'master' || github.ref }}
           files: |
-            ./build/bin/client*
-            ./build/bin/server*
-            ./assets
+            ./build/proj
