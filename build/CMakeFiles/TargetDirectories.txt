@@ -1,3 +1,0 @@
-/home/beafowl/test-jenkins/build/CMakeFiles/proj.dir
-/home/beafowl/test-jenkins/build/CMakeFiles/edit_cache.dir
-/home/beafowl/test-jenkins/build/CMakeFiles/rebuild_cache.dir
