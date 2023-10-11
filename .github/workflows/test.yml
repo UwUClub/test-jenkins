@@ -34,46 +34,9 @@ jobs:
         run: |
           cpack -G ZIP
 
-      - name: Upload Artifact (Fedora)
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/upload-artifact@v3
+      - name: Publish Tagged Release
+        uses: softprops/action-gh-release@v1
+        if: ${{ startsWith(github.ref, 'refs/tags/')}}
         with:
-          name: RTYPE-fedora-latest
-          path: ./build/_CPack_Packages/Linux/ZIP/RTYPE-*.zip
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          cache: npm
-          node-version: lts/*
-      - run: npm clean-install
-
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: artifacts
-
-      - name: Semantic Release
-        run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Fetch latest release version
-        id: latest_version
-        run: |
-          LATEST_VERSION=$(gh release list | head -n 1 | awk '{print $1}')
-          echo "Latest version is $LATEST_VERSION"
-          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: echo ${{ env.LATEST_VERSION }}
-
-      - name: Upload Release Asset via gh CLI
-        run: |
-          gh release upload ${{env.LATEST_VERSION}} ./artifacts/RTYPE-ubuntu-latest/*.deb
-          gh release upload ${{env.LATEST_VERSION}} ./artifacts/RTYPE-macos-latest/*.dmg
-          gh release upload ${{env.LATEST_VERSION}} ./artifacts/RTYPE-windows-latest/*.exe
-          gh release upload ${{env.LATEST_VERSION}} ./artifacts/RTYPE-fedora-latest/*.rpm
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            build/*-*${{ matrix.build_type }}*-*.*
