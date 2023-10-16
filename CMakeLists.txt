@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 project(hello_window)
+find_package(Threads REQUIRED)
 
 # Dependencies
 include(FetchContent)
@@ -21,4 +22,6 @@ set(SOURCE_FILES
     main.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
+target_link_libraries(${PROJECT_NAME} PRIVATE raylib
+    Threads::Threads
+)
